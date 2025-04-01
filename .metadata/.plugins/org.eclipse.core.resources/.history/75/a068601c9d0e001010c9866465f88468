@@ -1,0 +1,16 @@
+package com.kh.start.auth.service;
+
+import java.util.Map;
+
+import com.kh.start.member.model.dto.MemberDTO;
+
+public class AuthServiceImpl implements AuthService{
+
+	@Override
+	public Map<String, String> login(MemberDTO member) {
+		
+		// 그럼 여기서 우리는 무엇을 해야하는가?
+		
+		return null;
+	}
+}
