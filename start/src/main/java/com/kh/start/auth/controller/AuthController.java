@@ -2,6 +2,7 @@ package com.kh.start.auth.controller;
 
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.start.auth.service.AuthService;
 import com.kh.start.member.model.dto.MemberDTO;
+import com.kh.start.token.model.service.TokenService;
+import com.kh.start.token.model.vo.RefreshToken;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,15 +26,22 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthController {
 
 	private final AuthService authService;
+	private final TokenService tokenService;
 	
 	@PostMapping("login")
 	public ResponseEntity<?> login(@RequestBody MemberDTO member){
 		Map<String, String> loginResponse = authService.login(member);
-		log.info("자격증에 성공한 사용자의 정보 오나?? : {}", loginResponse);
+		//log.info("자격증에 성공한 사용자의 정보 오나?? : {}", loginResponse);
 		return ResponseEntity.ok(loginResponse);
 	}
 	
-	
+	@PostMapping("/refresh")
+	public ResponseEntity<?> refresh(@RequestBody Map<String, String> token){
+		String refreshToken = token.get("refreshToken");
+		
+		Map<String, String> newToken = tokenService.refreshToken(refreshToken);
+		return ResponseEntity.status(HttpStatus.CREATED).body(newToken);
+	}
 	
 	
 	

@@ -6,7 +6,10 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.kh.start.auth.util.JwtUtil;
+import com.kh.start.token.model.dao.TokenMapper;
+import com.kh.start.token.model.vo.RefreshToken;
 
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,22 +19,37 @@ import lombok.extern.slf4j.Slf4j;
 public class TokenServiceImpl implements TokenService {
 	
 	private final JwtUtil tokenUtil;
+	private final TokenMapper tokenMapper;
 	
 	@Override
-	public Map<String, String> generateToken(String username) {
+	public Map<String, String> generateToken(String username , Long memberNo) {
 		
 		// 1, 2번
 		Map<String, String> tokens = createToken(username);
 		
-		// 3번
+		// 3번 (*해결 memberNo, *해결 refreshToken, *해결 expiration)
+		saveToken(tokens.get("refreshToken"), memberNo);
 		
 		// 4번
+		tokenMapper.deleteExpiredRefreshToken(System.currentTimeMillis());
 		
 		// 5번
 		
 		return tokens;
 	}
 	
+	private void saveToken(String refreshToken, Long memberNo) {
+		RefreshToken token = RefreshToken.builder()
+				 .token(refreshToken)
+				 .memberNo(memberNo)
+				 .expiration(System.currentTimeMillis() + 36000000L * 72)
+				 .build();
+		
+		// 인서트
+		tokenMapper.saveToken(token);
+		
+	}
+
 	private Map<String, String> createToken(String username){
 		
 		String accessToken = tokenUtil.getAccessToken(username);
@@ -43,8 +61,29 @@ public class TokenServiceImpl implements TokenService {
 		
 		return tokens;
 	}
+
+	@Override
+	public Map<String, String> refreshToken(String refreshToken){
+		RefreshToken token = RefreshToken.builder()
+										 .token(refreshToken)
+										 .build();
+		RefreshToken responseToken = tokenMapper.findByToken(refreshToken);
+		// 오늘 숙제 1. JwtUtil을 이용하여
+		if(responseToken == null || token.getExpiration() < System.currentTimeMillis()) {
+			throw new RuntimeException("유효하지 않은 토큰입니다.");
+		}
+		
+		String username = getUsernameByToken(refreshToken);
+		Long memberNo = responseToken.getMemberNo();
+		
+		return generateToken(username, memberNo);
+	}
 	
-	
+	private String getUsernameByToken(String refreshToken) {
+		
+		Claims claims = tokenUtil.parseJwt(refreshToken);
+		return claims.getSubject();
+	}
 	
 	
 	
