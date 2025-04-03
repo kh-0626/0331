@@ -1,0 +1,6 @@
+package com.kh.start.comments.model.dao;
+
+public class CommentMapper {
+
+	void i
+}

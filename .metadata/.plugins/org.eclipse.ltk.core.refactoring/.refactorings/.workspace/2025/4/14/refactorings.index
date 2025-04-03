@@ -1,3 +1,5 @@
 1743554441839	Delete resource 'start/src/main/java/com/kh/start/admin/Controller/sdfs.java'
 1743554475436	Delete resource 'start/src/main/java/com/kh/start/admin/AdminController.java'
 1743579135374	Delete resource 'start/src/main/java/com/kh/start/board/dto/service'
+1743661978613	Delete resource 'start/src/main/java/com/kh/start/comments/model/dao/CommentMapper.java'
+1743664152399	Delete resource 'start/src/main/java/com/kh/start/comments/model/service/CommentServiceImpl.java'

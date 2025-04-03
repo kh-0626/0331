@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <typeInfoHistroy>
     <typeInfo handle="=start/src\/main\/java=/gradle_scope=/main=/=/gradle_used_by_scope=/main,test=/&lt;com.kh.start.board.service{BoardService.java[BoardService" modifiers="513" timestamp="1743579516646"/>
+    <typeInfo handle="=start/src\/main\/java=/gradle_scope=/main=/=/gradle_used_by_scope=/main,test=/&lt;com.kh.start.comments.model.service{CommentService.java[CommentService" modifiers="513" timestamp="1743662938770"/>
 </typeInfoHistroy>
